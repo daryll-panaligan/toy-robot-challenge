@@ -4,10 +4,10 @@
 enum eDirection
 {
     // arranged in clockwise order
-    SOUTH = 0,
+    NORTH = 0,
+    EAST,
+    SOUTH,
     WEST,
-    NORTH,
-    EAST
 };
 
 std::string dirToString(eDirection e);
