@@ -1,9 +1,11 @@
 #pragma once
 
 #include <gtest/gtest.h>
+#include "robot.h"
 
-TEST(TestCaseName, TestName)
+TEST(TestRobot, Place)
 {
-	EXPECT_EQ(1, 1);
-	EXPECT_TRUE(true);
+	Robot raven;
+	raven.place(1, 1, eDirection::SOUTH);
+	EXPECT_EQ(raven.report(), "1,1,SOUTH");
 }
