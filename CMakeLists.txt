@@ -1,26 +1,35 @@
+# Setup project
+
 cmake_minimum_required(VERSION 3.14)
 
-# GoogleTest requires at least C++14
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(toy-robot-challenge)
 
-# add header files in the lib
+# Compile main application
+
 include_directories(lib)
 
-# Create a sources variable with a link to all cpp files to compile
 set(SOURCES
     src/main.cpp
+    src/robot.cpp
+    src/utils.cpp
 )
 
-# Add an executable with the above sources
-add_executable(ToyRobot ${SOURCES})
+set(HEADERS
+    lib/robot.h
+    lib/utils.h
+)
+
+add_executable(ToyRobot ${SOURCES} ${HEADERS})
 
 target_include_directories(ToyRobot
     PRIVATE
         ${PROJECT_SOURCE_DIR}/lib
 )
+
+# Compile unit tests
 
 include(FetchContent)
 FetchContent_Declare(
@@ -31,8 +40,6 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-# Now simply link against gtest or gtest_main as needed. Eg
-# Create a sources variable with a link to all cpp files to compile
 enable_testing()
 
 set(TESTS
@@ -40,6 +47,7 @@ set(TESTS
 )
 
 add_executable(UnitTests ${TESTS})
-target_link_libraries(UnitTests GTest::gtest_main)
+add_library(ToyRobotLib ${SOURCES} ${HEADERS})
+target_link_libraries(UnitTests gtest_main gmock_main ToyRobotLib)
 include(GoogleTest)
 gtest_discover_tests(UnitTests)
