@@ -18,8 +18,40 @@ void Robot::move()
 
 void Robot::left()
 {
+    // Counterclockwise movement
+    switch (m_dir)
+    {
+    case NORTH:
+        m_dir = eDirection::WEST;
+        break;
+    case WEST:
+        m_dir = eDirection::SOUTH;
+        break;
+    case SOUTH:
+        m_dir = eDirection::EAST;
+        break;
+    case EAST:
+        m_dir = eDirection::NORTH;
+        break;
+    }
 }
 
 void Robot::right()
 {
+    // Clockwise movement
+    switch (m_dir)
+    {
+    case NORTH:
+        m_dir = eDirection::EAST;
+        break;
+    case EAST:
+        m_dir = eDirection::SOUTH;
+        break;
+    case SOUTH:
+        m_dir = eDirection::WEST;
+        break;
+    case WEST:
+        m_dir = eDirection::NORTH;
+        break;
+    }
 }
