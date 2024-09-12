@@ -15,6 +15,21 @@ std::string Robot::report()
 
 void Robot::move()
 {
+    switch (m_dir)
+    {
+    case NORTH:
+        ++m_y;
+        break;
+    case SOUTH:
+        --m_y;
+        break;
+    case EAST:
+        ++m_x;
+        break;
+    case WEST:
+        --m_x;
+        break;
+    }
 }
 
 void Robot::left()
