@@ -35,20 +35,28 @@ std::string Robot::report() const
 
 void Robot::move()
 {
+    int new_x = m_x;
+    int new_y = m_y;
     switch (m_dir)
     {
     case eDirection::NORTH:
-        ++m_y;
+        new_y = m_y + 1;
         break;
     case eDirection::SOUTH:
-        --m_y;
+        new_y = m_y - 1;
         break;
     case eDirection::EAST:
-        ++m_x;
+        new_x = m_x + 1;
         break;
     case eDirection::WEST:
-        --m_x;
+        new_x = m_x - 1;
         break;
+    }
+
+    if (m_pTable->isWithinBounds(new_x, new_y))
+    {
+        m_x = new_x;
+        m_y = new_y;
     }
 }
 
