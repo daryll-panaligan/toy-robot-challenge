@@ -13,12 +13,9 @@ std::string toReport(int x, int y, eDirection dir)
 class TestRobot
 {
 protected:
-	TestRobot() : table(5, 5), xLimit(5), yLimit(5) {};
+	TestRobot() : table(5, 5) {}
 	Robot robot;
 	Table table;
-
-	const int xLimit;
-	const int yLimit;
 };
 
 class TestRobotPlace : public TestRobot, public testing::Test
@@ -27,19 +24,19 @@ class TestRobotPlace : public TestRobot, public testing::Test
 
 TEST_F(TestRobotPlace, Place)
 {
-	int x_0 = xLimit - 1;
-	int y_0 = yLimit - 1;
+	int x_0 = table.getWidth() / 2;
+	int y_0 = table.getHeight() / 2;
 	robot.place(x_0, y_0, eDirection::SOUTH, std::make_shared<Table>(table));
 	EXPECT_EQ(robot.report(), toReport(x_0, y_0, eDirection::SOUTH));
 }
 
 TEST_F(TestRobotPlace, PlaceOutside)
 {
-	int x_0 = xLimit + 1;
-	int y_0 = yLimit + 1;
+	int x_0 = table.getWidth() + 1;
+	int y_0 = table.getHeight() + 1;
 	eDirection dir = eDirection::SOUTH;
 	robot.place(x_0, y_0, dir, std::make_shared<Table>(table));
-	EXPECT_EQ(robot.report(), "-1,-1,INVALID");
+	EXPECT_EQ(robot.report(), "INVALID");
 }
 
 class TestRobotMove : public TestRobot,
@@ -48,18 +45,24 @@ class TestRobotMove : public TestRobot,
 protected:
 	TestRobotMove()
 	{
-
+		x = table.getHeight() / 2;
+		y = table.getWidth() / 2;
 		robot.place(x, y, GetParam(), std::make_shared<Table>(table));
 	}
 
-	int x = 3;
-	int y = 3;
+	int x;
+	int y;
 };
+
+const auto directions = testing::Values(eDirection::SOUTH, eDirection::NORTH, eDirection::WEST, eDirection::EAST);
+std::string const toString(testing::TestParamInfo<TestRobotMove::ParamType> info)
+{
+	return dirToString(info.param);
+}
 
 INSTANTIATE_TEST_SUITE_P(TestDirections,
 						 TestRobotMove,
-						 testing::Values(eDirection::SOUTH, eDirection::NORTH, eDirection::WEST, eDirection::EAST), [](const testing::TestParamInfo<TestRobotMove::ParamType> &info)
-						 { return dirToString(info.param); });
+						 directions, toString);
 
 TEST_P(TestRobotMove, Move)
 {
