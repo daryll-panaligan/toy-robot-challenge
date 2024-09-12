@@ -2,38 +2,62 @@
 
 #include <gtest/gtest.h>
 #include "robot.h"
+#include <format>
 
 TEST(TestRobot, Place)
 {
-	Robot raven;
-	raven.place(1, 1, eDirection::SOUTH);
-	EXPECT_EQ(raven.report(), "1,1,SOUTH");
+	Robot r;
+	r.place(1, 1, eDirection::SOUTH);
+	EXPECT_EQ(r.report(), "1,1,SOUTH");
 }
 
-TEST(TestRobot, MoveLeft)
+class TestRobotTurn : public testing::Test
 {
-	Robot raven;
-	raven.place(1, 1, eDirection::SOUTH);
-	raven.left();
-	EXPECT_EQ(raven.report(), "1,1,EAST");
-	raven.left();
-	EXPECT_EQ(raven.report(), "1,1,NORTH");
-	raven.left();
-	EXPECT_EQ(raven.report(), "1,1,WEST");
-	raven.left();
-	EXPECT_EQ(raven.report(), "1,1,SOUTH");
+protected:
+	TestRobotTurn()
+	{
+		r.place(x, y, eDirection::SOUTH);
+	}
+
+	Robot r;
+
+	const int x = 1;
+	const int y = 1;
+};
+
+std::string toReport(int x, int y, eDirection dir)
+{
+	return std::format("{},{},{}", x, y, dirToString(dir));
 }
 
-TEST(TestRobot, MoveRight)
+TEST_F(TestRobotTurn, Left)
 {
-	Robot raven;
-	raven.place(1, 1, eDirection::SOUTH);
-	raven.right();
-	EXPECT_EQ(raven.report(), "1,1,WEST");
-	raven.right();
-	EXPECT_EQ(raven.report(), "1,1,NORTH");
-	raven.right();
-	EXPECT_EQ(raven.report(), "1,1,EAST");
-	raven.right();
-	EXPECT_EQ(raven.report(), "1,1,SOUTH");
+	r.left();
+	EXPECT_EQ(r.report(), toReport(x, y, eDirection::EAST));
+	r.left();
+	EXPECT_EQ(r.report(), toReport(x, y, eDirection::NORTH));
+	r.left();
+	EXPECT_EQ(r.report(), toReport(x, y, eDirection::WEST));
+	r.left();
+	EXPECT_EQ(r.report(), toReport(x, y, eDirection::SOUTH));
+}
+
+TEST_F(TestRobotTurn, Right)
+{
+	r.right();
+	EXPECT_EQ(r.report(), toReport(x, y, eDirection::WEST));
+	r.right();
+	EXPECT_EQ(r.report(), toReport(x, y, eDirection::NORTH));
+	r.right();
+	EXPECT_EQ(r.report(), toReport(x, y, eDirection::EAST));
+	r.right();
+	EXPECT_EQ(r.report(), toReport(x, y, eDirection::SOUTH));
+}
+
+TEST_F(TestRobotTurn, RightLeft)
+{
+	r.right();
+	EXPECT_EQ(r.report(), toReport(x, y, eDirection::WEST));
+	r.left();
+	EXPECT_EQ(r.report(), toReport(x, y, eDirection::SOUTH));
 }
