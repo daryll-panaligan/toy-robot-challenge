@@ -8,6 +8,10 @@ enum eDirection
     EAST,
     SOUTH,
     WEST,
+    SIZE
+
+    // XXX: Another approach is to declare this as a bitfield and rely on bit shifting to change directions (<< left, >> right).
+    //      Can be done later when implementing midpoint directions (north, northeast, east, ...)
 };
 
 std::string dirToString(eDirection e);

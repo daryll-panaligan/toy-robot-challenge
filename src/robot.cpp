@@ -17,16 +17,16 @@ void Robot::move()
 {
     switch (m_dir)
     {
-    case NORTH:
+    case eDirection::NORTH:
         ++m_y;
         break;
-    case SOUTH:
+    case eDirection::SOUTH:
         --m_y;
         break;
-    case EAST:
+    case eDirection::EAST:
         ++m_x;
         break;
-    case WEST:
+    case eDirection::WEST:
         --m_x;
         break;
     }
@@ -34,40 +34,10 @@ void Robot::move()
 
 void Robot::left()
 {
-    // Counterclockwise movement
-    switch (m_dir)
-    {
-    case NORTH:
-        m_dir = eDirection::WEST;
-        break;
-    case WEST:
-        m_dir = eDirection::SOUTH;
-        break;
-    case SOUTH:
-        m_dir = eDirection::EAST;
-        break;
-    case EAST:
-        m_dir = eDirection::NORTH;
-        break;
-    }
+    m_dir = static_cast<eDirection>((static_cast<int>(m_dir) + (eDirection::SIZE - 1)) % eDirection::SIZE);
 }
 
 void Robot::right()
 {
-    // Clockwise movement
-    switch (m_dir)
-    {
-    case NORTH:
-        m_dir = eDirection::EAST;
-        break;
-    case EAST:
-        m_dir = eDirection::SOUTH;
-        break;
-    case SOUTH:
-        m_dir = eDirection::WEST;
-        break;
-    case WEST:
-        m_dir = eDirection::NORTH;
-        break;
-    }
+    m_dir = static_cast<eDirection>((static_cast<int>(m_dir) + 1) % eDirection::SIZE);
 }

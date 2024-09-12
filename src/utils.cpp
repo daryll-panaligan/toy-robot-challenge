@@ -6,13 +6,13 @@ std::string dirToString(eDirection e)
 {
     switch (e)
     {
-    case NORTH:
+    case eDirection::NORTH:
         return "NORTH";
-    case EAST:
+    case eDirection::EAST:
         return "EAST";
-    case SOUTH:
+    case eDirection::SOUTH:
         return "SOUTH";
-    case WEST:
+    case eDirection::WEST:
         return "WEST";
     }
 
