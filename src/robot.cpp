@@ -16,9 +16,21 @@ void Robot::place(int x, int y, eDirection dir, std::shared_ptr<Table> const &ta
     }
 }
 
+bool Robot::isPlaced() const
+{
+    return (m_pTable != nullptr);
+}
+
 std::string Robot::report() const
 {
-    return std::format("{},{},{}", m_x, m_y, dirToString(m_dir));
+    if (isPlaced())
+    {
+        return std::format("{},{},{}", m_x, m_y, dirToString(m_dir));
+    }
+    else
+    {
+        return "INVALID";
+    }
 }
 
 void Robot::move()

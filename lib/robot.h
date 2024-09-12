@@ -24,7 +24,7 @@ public:
     }
     void place(int x, int y, eDirection dir, std::shared_ptr<Table> const &table);
     std::string report() const;
-
+    bool isPlaced() const;
     void move();
     void left();
     void right();
