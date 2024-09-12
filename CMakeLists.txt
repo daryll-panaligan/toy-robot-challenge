@@ -14,11 +14,13 @@ include_directories(lib)
 set(SOURCES
     src/main.cpp
     src/robot.cpp
+    src/table.cpp
     src/utils.cpp
 )
 
 set(HEADERS
     lib/robot.h
+    lib/table.h
     lib/utils.h
 )
 
