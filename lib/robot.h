@@ -8,7 +8,8 @@
 class Robot
 {
 private:
-    std::pair<int, int> m_coordinates{-1, -1};
+    int m_x = -1;
+    int m_y = -1;
     eDirection m_dir;
     std::string dirString(eDirection e);
 

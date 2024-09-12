@@ -3,13 +3,14 @@
 
 void Robot::place(int x, int y, eDirection dir)
 {
-    m_coordinates = {x, y};
+    m_x = x;
+    m_y = y;
     m_dir = dir;
 }
 
 std::string Robot::report()
 {
-    return std::format("{},{},{}", m_coordinates.first, m_coordinates.second, dirToString(m_dir));
+    return std::format("{},{},{}", m_x, m_y, dirToString(m_dir));
 }
 
 void Robot::move()
