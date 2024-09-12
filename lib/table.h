@@ -4,13 +4,16 @@
 class Table
 {
 private:
-    int m_xLimit;
-    int m_yLimit;
+    int m_width;
+    int m_height;
 
 public:
-    Table(int xLimit, int yLimit);
+    Table(int width, int height);
     bool isWithinBounds(int x, int y) const;
     void printCoord() const;
+
+    int getWidth() const;
+    int getHeight() const;
 };
 
 #endif // TOYROBOT_INCLUDE_TABLE_H_
