@@ -1,14 +1,22 @@
 #include "robot.h"
 #include <format>
 
-void Robot::place(int x, int y, eDirection dir)
+void Robot::place(int x, int y, eDirection dir, std::shared_ptr<Table> const &table)
 {
-    m_x = x;
-    m_y = y;
-    m_dir = dir;
+    if (table->isWithinBounds(x, y))
+    {
+        m_x = x;
+        m_y = y;
+        m_dir = dir;
+        m_pTable = table;
+    }
+    else
+    {
+        // do nothing. maybe add logs later
+    }
 }
 
-std::string Robot::report()
+std::string Robot::report() const
 {
     return std::format("{},{},{}", m_x, m_y, dirToString(m_dir));
 }

@@ -3,19 +3,27 @@
 
 #include <utility>
 #include <string>
+#include <iostream>
 #include "utils.h"
+#include "table.h"
 
 class Robot
 {
 private:
-    int m_x = -1;
-    int m_y = -1;
+    int m_x;
+    int m_y;
     eDirection m_dir;
-    std::string dirString(eDirection e);
+    std::shared_ptr<Table> m_pTable;
 
 public:
-    void place(int x, int y, eDirection dir);
-    std::string report();
+    Robot() : m_x(-1),
+              m_y(-1),
+              m_dir(eDirection::SIZE),
+              m_pTable(nullptr)
+    {
+    }
+    void place(int x, int y, eDirection dir, std::shared_ptr<Table> const &table);
+    std::string report() const;
 
     void move();
     void left();

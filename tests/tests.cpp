@@ -2,6 +2,7 @@
 
 #include <gtest/gtest.h>
 #include "robot.h"
+#include "table.h"
 #include <format>
 
 std::string toReport(int x, int y, eDirection dir)
@@ -9,25 +10,50 @@ std::string toReport(int x, int y, eDirection dir)
 	return std::format("{},{},{}", x, y, dirToString(dir));
 }
 
-TEST(TestRobot, Place)
+class TestRobot
 {
-	Robot r;
-	r.place(1, 1, eDirection::SOUTH);
-	EXPECT_EQ(r.report(), "1,1,SOUTH");
+protected:
+	TestRobot() : table(5, 5), xLimit(5), yLimit(5) {};
+	Robot robot;
+	Table table;
+
+	const int xLimit;
+	const int yLimit;
+};
+
+class TestRobotPlace : public TestRobot, public testing::Test
+{
+};
+
+TEST_F(TestRobotPlace, Place)
+{
+	int x_0 = xLimit - 1;
+	int y_0 = yLimit - 1;
+	robot.place(x_0, y_0, eDirection::SOUTH, std::make_shared<Table>(table));
+	EXPECT_EQ(robot.report(), toReport(x_0, y_0, eDirection::SOUTH));
 }
 
-class TestRobotMove : public testing::TestWithParam<eDirection>
+TEST_F(TestRobotPlace, PlaceOutside)
+{
+	int x_0 = xLimit + 1;
+	int y_0 = yLimit + 1;
+	eDirection dir = eDirection::SOUTH;
+	robot.place(x_0, y_0, dir, std::make_shared<Table>(table));
+	EXPECT_EQ(robot.report(), "-1,-1,INVALID");
+}
+
+class TestRobotMove : public TestRobot,
+					  public testing::TestWithParam<eDirection>
 {
 protected:
 	TestRobotMove()
 	{
-		r.place(x, y, GetParam());
+
+		robot.place(x, y, GetParam(), std::make_shared<Table>(table));
 	}
 
-	Robot r;
-
-	const int x = 3;
-	const int y = 3;
+	int x = 3;
+	int y = 3;
 };
 
 INSTANTIATE_TEST_SUITE_P(TestDirections,
@@ -37,70 +63,67 @@ INSTANTIATE_TEST_SUITE_P(TestDirections,
 
 TEST_P(TestRobotMove, Move)
 {
-	r.move();
+	robot.move();
 	eDirection dir = GetParam();
 	switch (dir)
 	{
 	case eDirection::SOUTH:
-		EXPECT_EQ(r.report(), toReport(x, y - 1, dir));
+		EXPECT_EQ(robot.report(), toReport(x, y - 1, dir));
 		break;
 	case eDirection::NORTH:
-		EXPECT_EQ(r.report(), toReport(x, y + 1, dir));
+		EXPECT_EQ(robot.report(), toReport(x, y + 1, dir));
 		break;
 	case eDirection::WEST:
-		EXPECT_EQ(r.report(), toReport(x - 1, y, dir));
+		EXPECT_EQ(robot.report(), toReport(x - 1, y, dir));
 		break;
 	case eDirection::EAST:
-		EXPECT_EQ(r.report(), toReport(x + 1, y, dir));
+		EXPECT_EQ(robot.report(), toReport(x + 1, y, dir));
 		break;
 	default:
 		// should fail. eg. when a new direction is added (northeast, northwest, etc.)
 		EXPECT_TRUE(false);
 	}
 }
-
-class TestRobotTurn : public testing::Test
+class TestRobotTurn : public TestRobot, public testing::Test
 {
 protected:
 	TestRobotTurn()
 	{
-		r.place(x, y, eDirection::SOUTH);
+		robot.place(x, y, eDirection::SOUTH, std::make_shared<Table>(table));
 	}
 
-	Robot r;
-
-	const int x = 1;
-	const int y = 1;
+	int x = 1;
+	int y = 1;
 };
 
 TEST_F(TestRobotTurn, Left)
 {
-	r.left();
-	EXPECT_EQ(r.report(), toReport(x, y, eDirection::EAST));
-	r.left();
-	EXPECT_EQ(r.report(), toReport(x, y, eDirection::NORTH));
-	r.left();
-	EXPECT_EQ(r.report(), toReport(x, y, eDirection::WEST));
-	r.left();
-	EXPECT_EQ(r.report(), toReport(x, y, eDirection::SOUTH));
+	robot.left();
+	EXPECT_EQ(robot.report(), toReport(x, y, eDirection::EAST));
+	robot.left();
+	EXPECT_EQ(robot.report(), toReport(x, y, eDirection::NORTH));
+	robot.left();
+	EXPECT_EQ(robot.report(), toReport(x, y, eDirection::WEST));
+	robot.left();
+	EXPECT_EQ(robot.report(), toReport(x, y, eDirection::SOUTH));
 }
 
 TEST_F(TestRobotTurn, Right)
 {
-	r.right();
-	EXPECT_EQ(r.report(), toReport(x, y, eDirection::WEST));
-	r.right();
-	EXPECT_EQ(r.report(), toReport(x, y, eDirection::NORTH));
-	r.right();
-	EXPECT_EQ(r.report(), toReport(x, y, eDirection::EAST));
-	r.right();
-	EXPECT_EQ(r.report(), toReport(x, y, eDirection::SOUTH));
+	robot.right();
+	EXPECT_EQ(robot.report(), toReport(x, y, eDirection::WEST));
+	robot.right();
+	EXPECT_EQ(robot.report(), toReport(x, y, eDirection::NORTH));
+	robot.right();
+	EXPECT_EQ(robot.report(), toReport(x, y, eDirection::EAST));
+	robot.right();
+	EXPECT_EQ(robot.report(), toReport(x, y, eDirection::SOUTH));
 }
 
 TEST_F(TestRobotTurn, RightLeft)
 {
-	r.right();
-	EXPECT_EQ(r.report(), toReport(x, y, eDirection::WEST));
-	r.left();
-	EXPECT_EQ(r.report(), toReport(x, y, eDirection::SOUTH));
+	robot.right();
+	EXPECT_EQ(robot.report(), toReport(x, y, eDirection::WEST));
+	robot.left();
+	EXPECT_EQ(robot.report(), toReport(x, y, eDirection::SOUTH));
 }
