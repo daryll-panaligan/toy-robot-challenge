@@ -14,6 +14,6 @@ enum eDirection
     //      Can be done later when implementing midpoint directions (north, northeast, east, ...)
 };
 
-std::string dirToString(eDirection e);
+std::string const dirToString(eDirection e);
 
 #endif // TOYROBOT_INCLUDE_UTILS_H_

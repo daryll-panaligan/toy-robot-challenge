@@ -2,7 +2,7 @@
 #include <iostream>
 #include "utils.h"
 
-std::string dirToString(eDirection e)
+std::string const dirToString(eDirection e)
 {
     switch (e)
     {
