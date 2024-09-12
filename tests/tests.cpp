@@ -39,6 +39,8 @@ TEST_F(TestRobotPlace, PlaceOutside)
 	EXPECT_EQ(robot.report(), "INVALID");
 }
 
+const auto directions = testing::Values(eDirection::SOUTH, eDirection::NORTH, eDirection::WEST, eDirection::EAST);
+
 class TestRobotMove : public TestRobot,
 					  public testing::TestWithParam<eDirection>
 {
@@ -54,7 +56,6 @@ protected:
 	int y;
 };
 
-const auto directions = testing::Values(eDirection::SOUTH, eDirection::NORTH, eDirection::WEST, eDirection::EAST);
 std::string const toString(testing::TestParamInfo<TestRobotMove::ParamType> info)
 {
 	return dirToString(info.param);
@@ -82,11 +83,46 @@ TEST_P(TestRobotMove, Move)
 	case eDirection::EAST:
 		EXPECT_EQ(robot.report(), toReport(x + 1, y, dir));
 		break;
-	default:
-		// should fail. eg. when a new direction is added (northeast, northwest, etc.)
-		EXPECT_TRUE(false);
 	}
 }
+
+class TestRobotMoveInvalid : public TestRobot,
+							 public testing::TestWithParam<eDirection>
+{
+};
+
+INSTANTIATE_TEST_SUITE_P(TestDirections,
+						 TestRobotMoveInvalid,
+						 directions, toString);
+
+TEST_P(TestRobotMoveInvalid, Move)
+{
+	int x;
+	int y;
+	eDirection dir = GetParam();
+
+	switch (dir)
+	{
+	case eDirection::SOUTH:
+	case eDirection::WEST:
+		// place robot at SW corner of table
+		x = 0;
+		y = 0;
+		break;
+	case eDirection::NORTH:
+	case eDirection::EAST:
+		// place robot at NE corner of table
+		x = table.getWidth() - 1;
+		y = table.getHeight() - 1;
+		break;
+	}
+	robot.place(x, y, GetParam(), std::make_shared<Table>(table));
+	robot.move();
+
+	// nothing should change
+	EXPECT_EQ(robot.report(), toReport(x, y, dir));
+}
+
 class TestRobotTurn : public TestRobot, public testing::Test
 {
 protected:
