@@ -204,20 +204,32 @@ protected:
 	}
 };
 
-class TestCommands : public TestParser, public testing::Test
+class TestCommandPlace : public TestParser, public testing::Test
 {
 };
 
-TEST_F(TestCommands, ValidPlace)
+TEST_F(TestCommandPlace, Valid)
 {
 	EXPECT_CALL(*mockRobot, place(3, 3, eDirection::NORTH, table));
 	p.parseCommand(table, mockRobot, "PLACE 3,3,NORTH");
 }
 
-TEST_F(TestCommands, ValidPlace)
+class TestCommandInvalid : public TestParser, public testing::TestWithParam<std::string>
 {
-	EXPECT_CALL(*mockRobot, place(3, 3, eDirection::NORTH, table));
-	p.parseCommand(table, mockRobot, "PLACE 3,3,NORTH");
+};
+
+const auto place_commands = testing::Values("PLACE 3,3,NORTHEAST", "PLACE 3,3,NORTH,", "PLACE 3,,3,NORTH");
+
+INSTANTIATE_TEST_SUITE_P(TestCommandInvalidPlace,
+						 TestCommandInvalid,
+						 place_commands);
+
+using ::testing::_;
+
+TEST_P(TestCommandInvalid, place_commands)
+{
+	EXPECT_CALL(*mockRobot, place(_, _, _, _)).Times(0);
+	p.parseCommand(table, mockRobot, GetParam());
 }
 
 class TestIgnoreIfNotPlaced : public TestParser, public testing::TestWithParam<bool>
