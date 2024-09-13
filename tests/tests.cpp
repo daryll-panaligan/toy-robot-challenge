@@ -52,7 +52,7 @@ TEST_F(TestRobotPlace, PlaceOutside)
 	int y_0 = table->getHeight() + 1;
 	eDirection dir = eDirection::SOUTH;
 	robot->place(x_0, y_0, dir, table);
-	EXPECT_EQ(robot->report(), "INVALID");
+	EXPECT_EQ(robot->isPlaced(), false);
 }
 
 const auto directions = testing::Values(eDirection::SOUTH, eDirection::NORTH, eDirection::WEST, eDirection::EAST);
@@ -208,7 +208,13 @@ class TestCommands : public TestParser, public testing::Test
 {
 };
 
-TEST_F(TestCommands, Place)
+TEST_F(TestCommands, ValidPlace)
+{
+	EXPECT_CALL(*mockRobot, place(3, 3, eDirection::NORTH, table));
+	p.parseCommand(table, mockRobot, "PLACE 3,3,NORTH");
+}
+
+TEST_F(TestCommands, ValidPlace)
 {
 	EXPECT_CALL(*mockRobot, place(3, 3, eDirection::NORTH, table));
 	p.parseCommand(table, mockRobot, "PLACE 3,3,NORTH");

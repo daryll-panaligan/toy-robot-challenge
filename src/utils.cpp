@@ -18,3 +18,25 @@ std::string const dirToString(eDirection e)
 
     return "INVALID";
 }
+
+eDirection const stringToDir(std::string dirString)
+{
+    if (dirString == "NORTH")
+    {
+        return eDirection::NORTH;
+    }
+    else if (dirString == "EAST")
+    {
+        return eDirection::EAST;
+    }
+    else if (dirString == "SOUTH")
+    {
+        return eDirection::SOUTH;
+    }
+    else if (dirString == "WEST")
+    {
+        return eDirection::WEST;
+    }
+
+    return eDirection::SIZE;
+}
