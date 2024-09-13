@@ -7,13 +7,13 @@ Table::Table(int width, int height)
 }
 bool Table::isWithinBounds(int x, int y) const
 {
-    return ((x >= 0) && (x < m_width)) && ((y >= 0) && (y < m_height));
+    return ((x >= 0) && (x < m_width)) &&
+           ((y >= 0) && (y < m_height));
 }
 
-void Table::printCoord() const
+void Table::printDimensions() const
 {
-    std::cout << "m_width: " << m_width << "| m_height: " << m_height;
-    std::cout << "\n";
+    std::cout << "Width: " << m_width << "| Height: " << m_height << "\n";
 }
 
 int Table::getWidth() const

@@ -16,6 +16,5 @@ std::string const dirToString(eDirection e)
         return "WEST";
     }
 
-    // fall through
     return "INVALID";
 }

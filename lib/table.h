@@ -10,10 +10,10 @@ private:
 public:
     Table(int width, int height);
     bool isWithinBounds(int x, int y) const;
-    void printCoord() const;
-
     int getWidth() const;
     int getHeight() const;
+
+    void printDimensions() const;
 };
 
 #endif // TOYROBOT_INCLUDE_TABLE_H_
