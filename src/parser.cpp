@@ -13,25 +13,25 @@ void Parser::parseCommand(std::shared_ptr<Table> const &table, std::shared_ptr<I
     }
     else if (robot->isPlaced())
     {
-        if (command == "MOVE")
+        if ("MOVE" == command)
         {
             robot->move();
         }
-        else if (command == "LEFT")
+        else if ("LEFT" == command)
         {
             robot->left();
         }
-        else if (command == "RIGHT")
+        else if ("RIGHT" == command)
         {
             robot->right();
         }
-        else if (command == "REPORT")
+        else if ("REPORT" == command)
         {
             robot->report();
         }
     }
     else
     {
-        // robot isn't on the table, ignore.
+        return; // robot isn't on the table, ignore.
     }
 }

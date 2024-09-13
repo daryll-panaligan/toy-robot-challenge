@@ -13,6 +13,7 @@ void Robot::place(int x, int y, eDirection dir, std::shared_ptr<Table> const &ta
     else
     {
         // do nothing. maybe add logs later
+        return;
     }
 }
 

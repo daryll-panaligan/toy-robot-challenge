@@ -15,5 +15,5 @@ enum eDirection
 };
 
 std::string const dirToString(eDirection e);
-
+eDirection const stringToDir(std::string dirString);
 #endif // TOYROBOT_INCLUDE_UTILS_H_
