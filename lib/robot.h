@@ -6,8 +6,9 @@
 #include <iostream>
 #include "utils.h"
 #include "table.h"
+#include "IRobot.h"
 
-class Robot
+class Robot : public IRobot
 {
 private:
     int m_x;

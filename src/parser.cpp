@@ -2,7 +2,7 @@
 #include <string>
 #include "utils.h"
 
-void Parser::parseCommand(std::shared_ptr<Table> const &table, std::shared_ptr<Robot> const &robot, std::string const &command) const
+void Parser::parseCommand(std::shared_ptr<Table> const &table, std::shared_ptr<IRobot> const &robot, std::string const &command) const
 {
     if (command.find("PLACE") == 0)
     {
@@ -11,23 +11,23 @@ void Parser::parseCommand(std::shared_ptr<Table> const &table, std::shared_ptr<R
         eDirection dir = eDirection::SOUTH;
         robot->place(0, 0, eDirection::SOUTH, table);
     }
-    else if (true)
+    else if (robot->isPlaced())
     {
         if (command == "MOVE")
         {
-            throw "not implemented yet";
+            robot->move();
         }
         else if (command == "LEFT")
         {
-            throw "not implemented yet";
+            robot->left();
         }
         else if (command == "RIGHT")
         {
-            throw "not implemented yet";
+            robot->right();
         }
         else if (command == "REPORT")
         {
-            throw "not implemented yet";
+            robot->report();
         }
     }
     else

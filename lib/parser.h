@@ -8,7 +8,7 @@
 class Parser
 {
 public:
-    void parseCommand(std::shared_ptr<Table> const &table, std::shared_ptr<Robot> const &robot, std::string const &command) const;
+    void parseCommand(std::shared_ptr<Table> const &table, std::shared_ptr<IRobot> const &robot, std::string const &command) const;
 };
 
 #endif // TOYROBOT_INCLUDE_PARSER_H_
