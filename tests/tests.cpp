@@ -3,6 +3,7 @@
 #include <gtest/gtest.h>
 #include "robot.h"
 #include "table.h"
+#include "parser.h"
 #include <format>
 
 std::string toReport(int x, int y, eDirection dir)
@@ -10,12 +11,19 @@ std::string toReport(int x, int y, eDirection dir)
 	return std::format("{},{},{}", x, y, dirToString(dir));
 }
 
+const int TABLE_HEIGHT = 5;
+const int TABLE_WIDTH = 5;
+
 class TestRobot
 {
 protected:
-	TestRobot() : table(5, 5) {}
-	Robot robot;
-	Table table;
+	TestRobot()
+	{
+		robot = std::make_shared<Robot>();
+		table = std::make_shared<Table>(TABLE_HEIGHT, TABLE_WIDTH);
+	}
+	std::shared_ptr<Robot> robot;
+	std::shared_ptr<Table> table;
 };
 
 class TestRobotPlace : public TestRobot, public testing::Test
@@ -24,19 +32,19 @@ class TestRobotPlace : public TestRobot, public testing::Test
 
 TEST_F(TestRobotPlace, Place)
 {
-	int x_0 = table.getWidth() / 2;
-	int y_0 = table.getHeight() / 2;
-	robot.place(x_0, y_0, eDirection::SOUTH, std::make_shared<Table>(table));
-	EXPECT_EQ(robot.report(), toReport(x_0, y_0, eDirection::SOUTH));
+	int x_0 = table->getWidth() / 2;
+	int y_0 = table->getHeight() / 2;
+	robot->place(x_0, y_0, eDirection::SOUTH, table);
+	EXPECT_EQ(robot->report(), toReport(x_0, y_0, eDirection::SOUTH));
 }
 
 TEST_F(TestRobotPlace, PlaceOutside)
 {
-	int x_0 = table.getWidth() + 1;
-	int y_0 = table.getHeight() + 1;
+	int x_0 = table->getWidth() + 1;
+	int y_0 = table->getHeight() + 1;
 	eDirection dir = eDirection::SOUTH;
-	robot.place(x_0, y_0, dir, std::make_shared<Table>(table));
-	EXPECT_EQ(robot.report(), "INVALID");
+	robot->place(x_0, y_0, dir, table);
+	EXPECT_EQ(robot->report(), "INVALID");
 }
 
 const auto directions = testing::Values(eDirection::SOUTH, eDirection::NORTH, eDirection::WEST, eDirection::EAST);
@@ -47,9 +55,9 @@ class TestRobotMove : public TestRobot,
 protected:
 	TestRobotMove()
 	{
-		x = table.getHeight() / 2;
-		y = table.getWidth() / 2;
-		robot.place(x, y, GetParam(), std::make_shared<Table>(table));
+		x = table->getHeight() / 2;
+		y = table->getWidth() / 2;
+		robot->place(x, y, GetParam(), table);
 	}
 
 	int x;
@@ -67,21 +75,21 @@ INSTANTIATE_TEST_SUITE_P(TestDirections,
 
 TEST_P(TestRobotMove, Move)
 {
-	robot.move();
+	robot->move();
 	eDirection dir = GetParam();
 	switch (dir)
 	{
 	case eDirection::SOUTH:
-		EXPECT_EQ(robot.report(), toReport(x, y - 1, dir));
+		EXPECT_EQ(robot->report(), toReport(x, y - 1, dir));
 		break;
 	case eDirection::NORTH:
-		EXPECT_EQ(robot.report(), toReport(x, y + 1, dir));
+		EXPECT_EQ(robot->report(), toReport(x, y + 1, dir));
 		break;
 	case eDirection::WEST:
-		EXPECT_EQ(robot.report(), toReport(x - 1, y, dir));
+		EXPECT_EQ(robot->report(), toReport(x - 1, y, dir));
 		break;
 	case eDirection::EAST:
-		EXPECT_EQ(robot.report(), toReport(x + 1, y, dir));
+		EXPECT_EQ(robot->report(), toReport(x + 1, y, dir));
 		break;
 	}
 }
@@ -112,15 +120,15 @@ TEST_P(TestRobotMoveInvalid, Move)
 	case eDirection::NORTH:
 	case eDirection::EAST:
 		// place robot at NE corner of table
-		x = table.getWidth() - 1;
-		y = table.getHeight() - 1;
+		x = table->getWidth() - 1;
+		y = table->getHeight() - 1;
 		break;
 	}
-	robot.place(x, y, GetParam(), std::make_shared<Table>(table));
-	robot.move();
+	robot->place(x, y, GetParam(), table);
+	robot->move();
 
 	// nothing should change
-	EXPECT_EQ(robot.report(), toReport(x, y, dir));
+	EXPECT_EQ(robot->report(), toReport(x, y, dir));
 }
 
 class TestRobotTurn : public TestRobot, public testing::Test
@@ -128,7 +136,7 @@ class TestRobotTurn : public TestRobot, public testing::Test
 protected:
 	TestRobotTurn()
 	{
-		robot.place(x, y, eDirection::SOUTH, std::make_shared<Table>(table));
+		robot->place(x, y, eDirection::SOUTH, table);
 	}
 
 	int x = 1;
@@ -137,32 +145,51 @@ protected:
 
 TEST_F(TestRobotTurn, Left)
 {
-	robot.left();
-	EXPECT_EQ(robot.report(), toReport(x, y, eDirection::EAST));
-	robot.left();
-	EXPECT_EQ(robot.report(), toReport(x, y, eDirection::NORTH));
-	robot.left();
-	EXPECT_EQ(robot.report(), toReport(x, y, eDirection::WEST));
-	robot.left();
-	EXPECT_EQ(robot.report(), toReport(x, y, eDirection::SOUTH));
+	robot->left();
+	EXPECT_EQ(robot->report(), toReport(x, y, eDirection::EAST));
+	robot->left();
+	EXPECT_EQ(robot->report(), toReport(x, y, eDirection::NORTH));
+	robot->left();
+	EXPECT_EQ(robot->report(), toReport(x, y, eDirection::WEST));
+	robot->left();
+	EXPECT_EQ(robot->report(), toReport(x, y, eDirection::SOUTH));
 }
 
 TEST_F(TestRobotTurn, Right)
 {
-	robot.right();
-	EXPECT_EQ(robot.report(), toReport(x, y, eDirection::WEST));
-	robot.right();
-	EXPECT_EQ(robot.report(), toReport(x, y, eDirection::NORTH));
-	robot.right();
-	EXPECT_EQ(robot.report(), toReport(x, y, eDirection::EAST));
-	robot.right();
-	EXPECT_EQ(robot.report(), toReport(x, y, eDirection::SOUTH));
+	robot->right();
+	EXPECT_EQ(robot->report(), toReport(x, y, eDirection::WEST));
+	robot->right();
+	EXPECT_EQ(robot->report(), toReport(x, y, eDirection::NORTH));
+	robot->right();
+	EXPECT_EQ(robot->report(), toReport(x, y, eDirection::EAST));
+	robot->right();
+	EXPECT_EQ(robot->report(), toReport(x, y, eDirection::SOUTH));
 }
 
 TEST_F(TestRobotTurn, RightLeft)
 {
-	robot.right();
-	EXPECT_EQ(robot.report(), toReport(x, y, eDirection::WEST));
-	robot.left();
-	EXPECT_EQ(robot.report(), toReport(x, y, eDirection::SOUTH));
+	robot->right();
+	EXPECT_EQ(robot->report(), toReport(x, y, eDirection::WEST));
+	robot->left();
+	EXPECT_EQ(robot->report(), toReport(x, y, eDirection::SOUTH));
+}
+
+#include <regex>
+
+class TestCommands : public TestRobot, public testing::Test
+{
+protected:
+	Parser p;
+};
+
+TEST_F(TestCommands, Place)
+{
+	p.parseCommand(table, robot, "PLACE");
+	EXPECT_TRUE(robot->isPlaced());
+}
+
+TEST_F(TestCommands, Move)
+{
+	p.parseCommand(table, robot, "MOVE");
 }
