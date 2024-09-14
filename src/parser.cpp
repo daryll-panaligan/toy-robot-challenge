@@ -4,7 +4,7 @@
 #include <regex>
 void Parser::parseCommand(std::shared_ptr<Table> const &table, std::shared_ptr<IRobot> const &robot, std::string const &command) const
 {
-    if (command.find("PLACE") == 0)
+    if (0 == command.find("PLACE"))
     {
         std::regex re("PLACE (\\d+),(\\d+),(NORTH|SOUTH|EAST|WEST)$");
 
@@ -38,11 +38,11 @@ void Parser::parseCommand(std::shared_ptr<Table> const &table, std::shared_ptr<I
         }
         else if ("REPORT" == command)
         {
-            robot->report();
+            std::cout << robot->report() << std::endl;
         }
     }
     else
     {
-        return; // robot isn't on the table, ignore.
+        return; // Robot isn't on the table or command isn't recognized
     }
 }
