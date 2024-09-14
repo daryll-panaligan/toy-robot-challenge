@@ -26,7 +26,7 @@ set(HEADERS
     lib/utils.h
 )
 
-add_executable(ToyRobot ${SOURCES} ${HEADERS})
+add_executable(ToyRobot ${SOURCES})
 
 target_include_directories(ToyRobot
     PRIVATE
@@ -46,11 +46,20 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
-set(TESTS
-    tests/tests.cpp
+set(TESTING
+    tests/test_robot.cpp
+    tests/test_parser.cpp
+    tests/fixtures.cpp
 )
 
-add_executable(UnitTests ${TESTS})
+set(TESTING_HEADERS
+    lib/parser.h
+    lib/robot.h
+    lib/table.h
+    lib/utils.h
+)
+
+add_executable(UnitTests ${TESTING})
 add_library(ToyRobotLib ${SOURCES} ${HEADERS})
 target_link_libraries(UnitTests gtest_main gmock_main ToyRobotLib)
 include(GoogleTest)
