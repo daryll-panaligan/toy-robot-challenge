@@ -1,15 +1,11 @@
 # toy-robot-challenge
 
-Toy Robot challenge written in C++
+Toy Robot challenge solution written in C++
 
 ## System Requirements
 
 - `C++14`
 - [`CMake>=3.14`](https://cmake.org/download/)
-
-## Notes
-
-All commands are run in `cmd`
 
 ## Setup and building
 
@@ -29,10 +25,26 @@ All commands are run in `cmd`
 ### Unit tests
 
 ```
+# cmd
+cd build\Debug
+UnitTests.exe
+
+# bash
 cd build/Debug
 ./UnitTests
 ```
 
 ### Using the supplied input files
 
-_WIP_
+```
+# cmd
+> build\Debug\ToyRobot.exe < sample_data.txt > test_output.txt
+> fc test_output.txt expected_output.txt
+```
+
+The output of `fc` above should be:
+
+```
+Comparing files test_output.txt and EXPECTED_OUTPUT.TXT
+FC: no differences encountered
+```
