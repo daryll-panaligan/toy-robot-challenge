@@ -1,5 +1,4 @@
-#ifndef TOYROBOT_INCLUDE_ROBOT_H_
-#define TOYROBOT_INCLUDE_ROBOT_H_
+#pragma once
 
 #include <utility>
 #include <string>
@@ -30,5 +29,3 @@ public:
     void left();
     void right();
 };
-
-#endif // TOYROBOT_INCLUDE_ROBOT_H_

@@ -1,5 +1,4 @@
-#ifndef TOYROBOT_INCLUDE_IROBOT_H_
-#define TOYROBOT_INCLUDE_IROBOT_H_
+#pragma once
 
 #include <string>
 #include "utils.h"
@@ -15,5 +14,3 @@ public:
     virtual void left() = 0;
     virtual void right() = 0;
 };
-
-#endif // TOYROBOT_INCLUDE_IROBOT_H_

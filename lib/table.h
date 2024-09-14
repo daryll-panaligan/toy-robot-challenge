@@ -1,5 +1,4 @@
-#ifndef TOYROBOT_INCLUDE_TABLE_H_
-#define TOYROBOT_INCLUDE_TABLE_H_
+#pragma once
 
 class Table
 {
@@ -15,5 +14,3 @@ public:
 
     void printDimensions() const;
 };
-
-#endif // TOYROBOT_INCLUDE_TABLE_H_
