@@ -1,8 +1,10 @@
 #pragma once
 
 #include <string>
-#include "utils.h"
-#include "table.h"
+#include <iostream>
+
+enum eDirection;
+class Table;
 
 class IRobot
 {

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 enum eDirection
 {
     // arranged in clockwise order

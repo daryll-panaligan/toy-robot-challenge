@@ -10,11 +10,6 @@ void Robot::place(int x, int y, eDirection dir, std::shared_ptr<Table> const &ta
         m_dir = dir;
         m_pTable = table;
     }
-    else
-    {
-        // do nothing. maybe add logs later
-        return;
-    }
 }
 
 bool Robot::isPlaced() const

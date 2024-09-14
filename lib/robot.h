@@ -1,11 +1,8 @@
 #pragma once
 
-#include <utility>
-#include <string>
-#include <iostream>
-#include "utils.h"
 #include "table.h"
 #include "IRobot.h"
+#include "utils.h"
 
 class Robot : public IRobot
 {
